@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0878d1">
+<meta name="description" content="Sunny Outlook compares available weather model forecasts to help you find the most promising weather.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Sunny Outlook — Find your bright spot</title>
+<style>
+:root{--blue:#0878d1;--deep:#092b55;--sky:#eaf6ff;--yellow:#ffc928;--ink:#102b4e;--muted:#61758d;--card:#fff;--line:#dce8f2}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#e8f6ff,#f7fbff 42%,#fff9e8);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px max(20px,calc((100vw - 1100px)/2));background:#ffffffd9;border-bottom:1px solid #d9eaf7;position:sticky;top:0;backdrop-filter:blur(12px);z-index:3}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.2rem;font-weight:850;letter-spacing:-.04em}.logo{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#00a6f5,#0878d1);font-size:25px;box-shadow:0 5px 16px #0878d133}
+.pill{font-size:.78rem;color:#08734b;background:#e0f8eb;padding:7px 11px;border-radius:99px;font-weight:750}
+main{max-width:1100px;margin:auto;padding:34px 20px 55px}.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:25px;align-items:center;margin:12px 0 30px}
+.eyebrow{color:#0878d1;text-transform:uppercase;letter-spacing:.13em;font-weight:850;font-size:.75rem}.hero h1{font-size:clamp(2.5rem,6vw,4.7rem);line-height:.98;letter-spacing:-.065em;margin:13px 0 18px;color:var(--deep)}.hero h1 span{color:var(--blue)}.hero p{font-size:1.08rem;line-height:1.6;color:#4c6680;max-width:560px}
+.sun-card{min-height:240px;border-radius:28px;padding:28px;background:linear-gradient(145deg,#0985df,#004f9f);color:white;position:relative;overflow:hidden;box-shadow:0 18px 40px #0569b526}.sun-card:before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:#ffcc38;right:-30px;top:-45px;opacity:.98}.sun-card:after{content:"";position:absolute;width:260px;height:95px;background:#5ac3f5;border-radius:50% 50% 0 0;right:-30px;bottom:-38px;transform:rotate(-8deg);box-shadow:0 -18px 0 #d4f3ff}.sun-emoji{font-size:54px;position:relative;z-index:1}.sun-card h2{position:relative;z-index:1;font-size:1.45rem;margin:18px 0 7px;max-width:250px}.sun-card p{position:relative;z-index:1;color:#e8f6ff;font-size:.9rem;margin:0;max-width:260px}
+.search-panel,.panel{background:white;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 8px 28px #194b7010}.search-panel{display:flex;gap:10px;align-items:center}.search-wrap{position:relative;flex:1}.search-wrap label{display:block;font-size:.8rem;font-weight:800;margin:0 0 8px 3px}.search-wrap input{width:100%;padding:15px 15px;border:1px solid #c8dbea;border-radius:13px;font:inherit;outline:none}.search-wrap input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #0878d11c}button{border:0;cursor:pointer;font:inherit;font-weight:800;border-radius:13px;padding:15px 19px;background:var(--blue);color:white;box-shadow:0 5px 14px #0878d12b}button:hover{filter:brightness(.95)}button:disabled{opacity:.55;cursor:wait}.hint{font-size:.8rem;color:var(--muted);margin:10px 4px 0}.error{color:#b42318;font-weight:650}.suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.suggestions button{background:#eaf5ff;color:#1766a5;box-shadow:none;padding:8px 12px;font-size:.83rem}
+.results{margin-top:24px;display:none}.results-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin:0 2px 15px}.results-head h2{font-size:1.6rem;letter-spacing:-.04em;margin:0}.results-head p{margin:4px 0 0;color:var(--muted);font-size:.88rem}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.best{background:linear-gradient(145deg,#0878d1,#0756a1);color:white;border-radius:22px;padding:24px;position:relative;overflow:hidden}.best:after{content:"☀";position:absolute;right:8px;top:12px;font-size:105px;color:#ffda54;opacity:.95}.best .small{font-size:.8rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#d7efff}.best h3{font-size:1.35rem;margin:9px 0}.scoreline{display:flex;align-items:center;gap:15px;margin:18px 0}.score{font-size:3.8rem;font-weight:900;letter-spacing:-.08em;line-height:1}.score span{font-size:1.1rem;letter-spacing:0}.best p{color:#e4f4ff;max-width:360px;line-height:1.5}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}.stat{background:#ffffff1b;border:1px solid #ffffff2a;border-radius:13px;padding:11px}.stat b{display:block;font-size:1.1rem}.stat small{font-size:.72rem;color:#d7efff}
+.panel h3{margin:0 0 13px;font-size:1rem}.provider{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #edf2f7}.provider:last-child{border:0}.provider strong{display:block;font-size:.92rem}.provider small{display:block;color:var(--muted);font-size:.77rem;margin-top:3px}.provider-score{font-weight:850;color:#0878d1;background:#eaf6ff;padding:7px 10px;border-radius:10px;white-space:nowrap}
+.daily{margin-top:16px}.days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{border:1px solid var(--line);border-radius:15px;padding:12px 8px;text-align:center;background:white}.day strong{font-size:.78rem}.day .icon{font-size:1.5rem;margin:9px 0}.day b{display:block}.day small{color:var(--muted);font-size:.72rem}
+.note{font-size:.82rem;line-height:1.55;color:#63778b;margin:16px 3px 0}.how{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:35px}.how article{padding:18px;border:1px solid #dceaf4;border-radius:18px;background:#ffffffad}.how .n{display:grid;place-items:center;background:#fff0b5;color:#8c6500;width:35px;height:35px;border-radius:12px;font-weight:900}.how h3{font-size:1rem;margin:12px 0 6px}.how p{font-size:.88rem;color:var(--muted);line-height:1.5;margin:0}footer{text-align:center;color:#6a8198;padding:25px 16px;font-size:.8rem}
+@media(max-width:760px){header{padding:13px 16px}main{padding:23px 14px 40px}.hero{grid-template-columns:1fr;gap:16px}.hero h1{font-size:3.2rem}.sun-card{min-height:195px}.search-panel{flex-direction:column;align-items:stretch}.search-panel button{width:100%}.grid{grid-template-columns:1fr}.days{grid-template-columns:repeat(4,1fr)}.how{grid-template-columns:1fr}.results-head{align-items:start;flex-direction:column}.pill{font-size:.7rem}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">☀️</div>Sunny Outlook</div><div class="pill">Forecast optimism, with the facts</div></header>
+<main>
+<section class="hero">
+<div><div class="eyebrow">A brighter way to plan</div><h1>Find the best weather.<br><span>Not just the average.</span></h1><p>Search a place and compare available forecast models to find the most promising windows for sunshine, warmth and lower rain chances.</p></div>
+<div class="sun-card"><div class="sun-emoji">☀️</div><h2>Your next bright spot starts here.</h2><p>Compare the outlook. Pick the day. Make the most of it.</p></div>
+</section>
+<section class="search-panel">
+<div class="search-wrap"><label for="location">Where do you want the sunshine?</label><input id="location" type="search" placeholder="Enter a town, city or postcode…" autocomplete="off"><div class="hint">Try “Leeds”, “Lake Garda” or “Barcelona”.</div></div>
+<button id="searchBtn">Find my outlook ↗</button>
+</section>
+<div class="suggestions"><button data-place="Leeds">Leeds</button><button data-place="Lake Garda">Lake Garda</button><button data-place="Barcelona">Barcelona</button><button data-place="Edinburgh">Edinburgh</button></div>
+<p id="status" class="hint" role="status" aria-live="polite"></p>
+<section id="results" class="results">
+<div class="results-head"><div><h2 id="placeTitle">Your outlook</h2><p id="updated">Comparing available forecast models</p></div><div class="pill" id="bestLabel">Best outlook found</div></div>
+<div class="grid">
+<div class="best"><div class="small">Sunny Outlook score</div><h3 id="bestDay">Best upcoming day</h3><div class="scoreline"><div class="score" id="score">—<span>/100</span></div><div><strong id="weatherLabel">Checking conditions…</strong><div id="bestTemp">—</div></div></div><p id="bestSummary">The best-scoring day based on sunshine, temperature and precipitation probability.</p><div class="stats"><div class="stat"><b id="sunHours">—</b><small>Sunshine hours</small></div><div class="stat"><b id="rainChance">—</b><small>Rain chance</small></div><div class="stat"><b id="maxTemp">—</b><small>High temperature</small></div></div></div>
+<div class="panel"><h3>Forecast model comparison</h3><div id="providers"><div class="provider"><div><strong>Loading models…</strong><small>Please wait</small></div></div></div><p class="note">Model scores are calculated by Sunny Outlook from forecast data. They are not official ratings issued by the weather providers.</p></div>
+</div>
+<div class="panel daily"><h3>Next 7 days</h3><div class="days" id="days"></div></div>
+<p class="note" id="sourceNote">Forecast data is supplied by Open-Meteo. Different models can disagree; this tool highlights the most positive model outlook, not a guarantee of actual weather.</p>
+</section>
+<section class="how">
+<article><div class="n">1</div><h3>Search any location</h3><p>Look up a city, town, region or postcode to get a local forecast.</p></article>
+<article><div class="n">2</div><h3>Compare the outlook</h3><p>See how available weather models differ and which gives the sunniest conditions.</p></article>
+<article><div class="n">3</div><h3>Plan around the bright spot</h3><p>Find a promising day with a clear view of sunshine, temperature and rain risk.</p></article>
+</section>
+</main>
+<footer>Sunny Outlook · More sunshine. Less guesswork. · Forecasts are estimates, not guarantees.</footer>
+<script>
+const $=id=>document.getElementById(id);
+const models=[
+ {id:"best_match",name:"Open-Meteo best match",desc:"Automatically selected local model"},
+ {id:"ecmwf_ifs025",name:"ECMWF IFS",desc:"European global forecast model"},
+ {id:"gfs_seamless",name:"GFS",desc:"US global forecast model"},
+ {id:"icon_seamless",name:"ICON",desc:"DWD forecast model"}
+];
+function scoreDay(temp,precip,sunshine,cloud){
+ const warmth=Math.max(0,Math.min(100,100-Math.abs(temp-23)*5));
+ const sun=Math.max(0,Math.min(100,(sunshine/12)*100));
+ const dry=Math.max(0,100-precip*1.5);
+ const clear=100-cloud;
+ return Math.round(sun*.42+dry*.28+warmth*.18+clear*.12);
+}
+function iconFor(code){if(code===0)return"☀️";if(code<=2)return"🌤️";if(code<=3)return"☁️";if(code<=48)return"🌫️";if(code<=67)return"🌧️";if(code<=77)return"❄️";if(code<=82)return"🌦️";if(code<=99)return"⛈️";return"🌤️"}
+function condition(code){if(code===0)return"Clear sky";if(code<=2)return"Mostly sunny";if(code===3)return"Cloudy";if(code<=48)return"Foggy";if(code<=67)return"Rain";if(code<=77)return"Snow";if(code<=82)return"Showers";if(code<=99)return"Thunderstorms";return"Mixed conditions"}
+async function geocode(q){
+ const url="https://geocoding-api.open-meteo.com/v1/search?name="+encodeURIComponent(q)+"&count=8&language=en&format=json";
+ const r=await fetch(url);if(!r.ok)throw Error("Location search failed. Please try again.");const d=await r.json();
+ if(!d.results?.length)throw Error("Couldn't find that location. Try a nearby town or city.");
+ const exact=d.results.find(x=>(x.name||"").toLowerCase()===q.toLowerCase())||d.results[0];return exact;
+}
+async function getModel(place,model){
+ const params=new URLSearchParams({latitude:place.latitude,longitude:place.longitude,daily:"weather_code,temperature_2m_max,precipitation_probability_max,sunshine_duration,uv_index_max",timezone:"auto",forecast_days:"7",models:model.id});
+ const r=await fetch("https://api.open-meteo.com/v1/forecast?"+params);if(!r.ok)throw Error("Forecast source unavailable");return {model,data:await r.json()};
+}
+function parseModel(result){
+ const d=result.data.daily,days=[];
+ for(let i=0;i<d.time.length;i++){
+  const temp=d.temperature_2m_max?.[i]??20, rain=d.precipitation_probability_max?.[i]??0;
+  const sun=(d.sunshine_duration?.[i]??0)/3600, code=d.weather_code?.[i]??3;
+  const cloud=code===0?5:code<=2?25:code===3?55:code<=48?70:code<=67?88:75;
+  days.push({date:d.time[i],temp,rain,sun,code,score:scoreDay(temp,rain,sun,cloud)});
+ }
+ return days;
+}
+function dayName(date,opts={weekday:"short",day:"numeric"}){return new Date(date+"T12:00:00").toLocaleDateString(undefined,opts)}
+async function search(){
+ const q=$("location").value.trim();if(!q){$("status").textContent="Enter a location first.";return}
+ $("searchBtn").disabled=true;$("status").textContent="Finding your location and comparing forecasts…";$("status").className="hint";$("results").style.display="none";
+ try{
+  const place=await geocode(q);$("status").textContent="";const settled=await Promise.allSettled(models.map(m=>getModel(place,m)));
+  const available=settled.filter(x=>x.status==="fulfilled").map(x=>({model:x.value.model,days:parseModel(x.value)}));
+  if(!available.length)throw Error("Forecast providers are unavailable right now. Please try again shortly.");
+  const ranked=available.map(m=>({...m,best:m.days.reduce((a,b)=>b.score>a.score?b:a,m.days[0])})).sort((a,b)=>b.best.score-a.best.score);
+  const winner=ranked[0],best=winner.best;
+  $("results").style.display="block";$("placeTitle").textContent=[place.name,place.admin1,place.country].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(", ");
+  $("updated").textContent="Best available model outlook · "+new Date().toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"});
+  $("bestDay").textContent=dayName(best.date,{weekday:"long",month:"short",day:"numeric"});
+  $("score").innerHTML=best.score+'<span>/100</span>';$("weatherLabel").textContent=condition(best.code);$("bestTemp").textContent=Math.round(best.temp)+"°C high";
+  $("bestSummary").textContent=`${winner.model.name} gives the most positive outlook for this location on this day, combining sunshine, temperature and lower rain risk.`;
+  $("sunHours").textContent=best.sun.toFixed(1)+" h";$("rainChance").textContent=Math.round(best.rain)+"%";$("maxTemp").textContent=Math.round(best.temp)+"°C";
+  $("providers").innerHTML=ranked.map((m,i)=>`<div class="provider"><div><strong>${i===0?"☀️ ":""}${m.model.name}</strong><small>${m.model.desc} · best day ${dayName(m.best.date,{weekday:"short",day:"numeric"})}</small></div><div class="provider-score">${m.best.score}/100</div></div>`).join("")+(settled.some(x=>x.status==="rejected")?`<p class="note">${settled.filter(x=>x.status==="rejected").length} model request(s) were unavailable and excluded.</p>`:"");
+  const dayCards=best.date?winner.days:[];
+  $("days").innerHTML=dayCards.map(d=>`<div class="day"><strong>${dayName(d.date)}</strong><div class="icon">${iconFor(d.code)}</div><b>${Math.round(d.temp)}°</b><small>${Math.round(d.rain)}% rain</small><div style="margin-top:7px;font-size:.72rem;color:#0878d1;font-weight:800">${d.score} outlook</div></div>`).join("");
+  $("sourceNote").textContent="Data: Open-Meteo forecast API and its available forecast models. Model availability varies by location. Scores are Sunny Outlook's own simple ranking, not an official forecast metric; actual conditions may differ.";
+  $("results").scrollIntoView({behavior:"smooth",block:"start"});
+ }catch(e){$("status").textContent=e.message||"Something went wrong. Please try again.";$("status").className="hint error"}
+ finally{$("searchBtn").disabled=false}
+}
+$("searchBtn").addEventListener("click",search);$("location").addEventListener("keydown",e=>{if(e.key==="Enter")search()});document.querySelectorAll("[data-place]").forEach(b=>b.addEventListener("click",()=>{$("location").value=b.dataset.place;search()}));
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body>
+</html>

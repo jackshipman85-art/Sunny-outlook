@@ -1,0 +1,10 @@
+{
+  "name": "Sunny Outlook",
+  "short_name": "Sunny Outlook",
+  "description": "Compare available forecast models to find your most promising weather outlook.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#eaf6ff",
+  "theme_color": "#0878d1",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
