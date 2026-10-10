@@ -45,7 +45,7 @@ main{max-width:1100px;margin:auto;padding:34px 20px 55px}.hero{display:grid;grid
 <div class="panel"><h3>Forecast model comparison</h3><div id="providers"><div class="provider"><div><strong>Loading models…</strong><small>Please wait</small></div></div></div><p class="note">Model scores are calculated by Sunny Outlook from forecast data. They are not official ratings issued by the weather providers.</p></div>
 </div>
 <div class="panel daily"><h3>Next 7 days</h3><div class="days" id="days"></div></div>
-<p class="note" id="sourceNote">Forecast data is supplied by Open-Meteo. Different models can disagree; this tool highlights the most positive model outlook, not a guarantee of actual weather.</p>
+<p class="note" id="sourceNote">Forecast data is supplied by Open-Meteo using weather models from multiple national meteorological services. Different models can disagree; this tool highlights the most positive model outlook, not a guarantee of actual weather.</p>
 </section>
 <section class="how">
 <article><div class="n">1</div><h3>Search any location</h3><p>Look up a city, town, region or postcode to get a local forecast.</p></article>
@@ -57,10 +57,21 @@ main{max-width:1100px;margin:auto;padding:34px 20px 55px}.hero{display:grid;grid
 <script>
 const $=id=>document.getElementById(id);
 const models=[
- {id:"best_match",name:"Open-Meteo best match",desc:"Automatically selected local model"},
- {id:"ecmwf_ifs025",name:"ECMWF IFS",desc:"European global forecast model"},
- {id:"gfs_seamless",name:"GFS",desc:"US global forecast model"},
- {id:"icon_seamless",name:"ICON",desc:"DWD forecast model"}
+ {id:"best_match",name:"Open-Meteo Best Match",desc:"Location-aware baseline forecast"},
+ {id:"ecmwf_ifs025",name:"ECMWF IFS",desc:"European Centre global model"},
+ {id:"ecmwf_aifs025_single",name:"ECMWF AIFS",desc:"AI-based global forecast model"},
+ {id:"ncep_gfs_seamless",name:"NOAA GFS",desc:"US global forecast model"},
+ {id:"icon_seamless",name:"DWD ICON",desc:"German global and regional models"},
+ {id:"meteofrance_seamless",name:"Météo-France",desc:"French global and regional models"},
+ {id:"ukmo_seamless",name:"UK Met Office",desc:"UK and global forecast models"},
+ {id:"cmc_gem_seamless",name:"Environment Canada GEM",desc:"Canadian global and regional models"},
+ {id:"jma_seamless",name:"Japan Meteorological Agency",desc:"Japanese global and regional models"},
+ {id:"kma_seamless",name:"Korea Meteorological Administration",desc:"Korean forecast models"},
+ {id:"bom_access_global",name:"Australian Bureau of Meteorology",desc:"ACCESS global model"},
+ {id:"metno_seamless",name:"MET Norway",desc:"Nordic forecast models"},
+ {id:"knmi_seamless",name:"KNMI Netherlands",desc:"Dutch forecast models"},
+ {id:"dmi_seamless",name:"Danish Meteorological Institute",desc:"Danish forecast models"},
+ {id:"cma_grapes_global",name:"China Meteorological Administration",desc:"CMA GRAPES global model"}
 ];
 function scoreDay(temp,precip,sunshine,cloud){
  const warmth=Math.max(0,Math.min(100,100-Math.abs(temp-23)*5));
@@ -110,7 +121,7 @@ async function search(){
   $("providers").innerHTML=ranked.map((m,i)=>`<div class="provider"><div><strong>${i===0?"☀️ ":""}${m.model.name}</strong><small>${m.model.desc} · best day ${dayName(m.best.date,{weekday:"short",day:"numeric"})}</small></div><div class="provider-score">${m.best.score}/100</div></div>`).join("")+(settled.some(x=>x.status==="rejected")?`<p class="note">${settled.filter(x=>x.status==="rejected").length} model request(s) were unavailable and excluded.</p>`:"");
   const dayCards=best.date?winner.days:[];
   $("days").innerHTML=dayCards.map(d=>`<div class="day"><strong>${dayName(d.date)}</strong><div class="icon">${iconFor(d.code)}</div><b>${Math.round(d.temp)}°</b><small>${Math.round(d.rain)}% rain</small><div style="margin-top:7px;font-size:.72rem;color:#0878d1;font-weight:800">${d.score} outlook</div></div>`).join("");
-  $("sourceNote").textContent="Data: Open-Meteo forecast API and its available forecast models. Model availability varies by location. Scores are Sunny Outlook's own simple ranking, not an official forecast metric; actual conditions may differ.";
+  $("sourceNote").textContent="Data: Open-Meteo forecast API, which provides model output from national weather services including ECMWF, NOAA, DWD, Météo-France, the UK Met Office, Environment Canada, JMA, KMA, BOM, MET Norway, KNMI, DMI and CMA. Model availability varies by location. Scores are Sunny Outlook's own simple ranking, not an official forecast metric; actual conditions may differ.";
   $("results").scrollIntoView({behavior:"smooth",block:"start"});
  }catch(e){$("status").textContent=e.message||"Something went wrong. Please try again.";$("status").className="hint error"}
  finally{$("searchBtn").disabled=false}
